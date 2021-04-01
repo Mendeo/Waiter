@@ -8,11 +8,10 @@ Module Module1
 		Dim procNames() As String = sr.ReadLine().Split(" "c)
 		Dim period As Integer = Integer.Parse(sr.ReadLine())
 		Do
-			Dim flag As Boolean = True
-			For Each proc As String In procNames
-				flag = flag And (Process.GetProcessesByName(proc).Length = 0)
-			Next
-			If flag Then Exit Do
+			If noOneProcs(procNames) Then
+				Threading.Thread.Sleep(3000) 'Ждём, вдруг появится
+				If noOneProcs(procNames) Then Exit Do
+			End If
 			Threading.Thread.Sleep(period)
 		Loop
 		Threading.Thread.Sleep(1000)
@@ -23,4 +22,15 @@ Module Module1
 		Shell("shutdown /s /f /t 0")
 	End Sub
 
+	Private Function hasProc(procName As String) As Boolean
+		Return Process.GetProcessesByName(procName).Length > 0
+	End Function
+	Private Function noOneProcs(procNames() As String) As Boolean
+		Dim flag As Boolean = True
+		For Each proc As String In procNames
+			flag = flag And Not hasProc(proc)
+			If Not flag Then Exit For
+		Next
+		Return flag
+	End Function
 End Module
