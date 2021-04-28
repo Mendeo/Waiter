@@ -9,9 +9,11 @@ Module Module1
 		Dim period As Integer = Integer.Parse(sr.ReadLine())
 		Do
 			If noOneProcs(procNames) Then
+				Console.Write("+")
 				Threading.Thread.Sleep(3000) 'Ждём, вдруг появится
 				If noOneProcs(procNames) Then Exit Do
 			End If
+			Console.Write("-")
 			Threading.Thread.Sleep(period)
 		Loop
 		Threading.Thread.Sleep(1000)
